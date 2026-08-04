@@ -1,0 +1,5 @@
+# Runtime artefacts - regenerable, never committed.
+*.redb
+segments/
+.duckdb/
+dev.log

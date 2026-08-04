@@ -1,0 +1,55 @@
+# semantic.toml - what this nest's data *means* (RFC-0016). Read by the MCP `schema`
+# tool, the admin UI, and the scaffolded skill. Edit descriptions freely; the
+# `[table.*.footguns]` are DERIVED from the ABI and regenerated - leave them be.
+
+schema_version = 1
+
+[nest]
+description = "The `obib-case6` nest on mainnet. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.factory__pair_created]
+description = "`PairCreated(address,address,address,uint256)` events emitted by the `factory` contract. (seeded from the ABI - edit semantic.toml to improve this)"
+grain = "one row per PairCreated(address,address,address,uint256) event"
+
+[table.factory__pair_created.columns]
+arg3 = "The `arg3` uint256 parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+pair = "The `pair` address parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+token0 = "The `token0` address parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+token1 = "The `token1` address parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.factory__pair_created.footguns]
+big_ints = ["arg3"]
+overflows_dec = ["arg3"]
+
+[table.pair__swap]
+description = "`Swap(address,uint256,uint256,uint256,uint256,address)` events emitted by the `pair` contract. (seeded from the ABI - edit semantic.toml to improve this)"
+grain = "one row per Swap(address,uint256,uint256,uint256,uint256,address) event"
+
+[table.pair__swap.columns]
+amount0In = "The `amount0In` uint256 parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+amount0Out = "The `amount0Out` uint256 parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+amount1In = "The `amount1In` uint256 parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+amount1Out = "The `amount1Out` uint256 parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+sender = "The `sender` address parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+to = "The `to` address parameter. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.pair__swap.footguns]
+reserved_words = ["to"]
+big_ints = [
+    "amount0In",
+    "amount1In",
+    "amount0Out",
+    "amount1Out",
+]
+overflows_dec = [
+    "amount0In",
+    "amount1In",
+    "amount0Out",
+    "amount1Out",
+]
+
+[view]
+
+# Authored views (views/*.sql) are described here so the MCP/`/schema` can render them:
+# [view.your_view_name]
+# description = "What this derivation computes."
