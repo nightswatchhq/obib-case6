@@ -34,10 +34,12 @@ That is the entire design goal, and it cuts both ways.
 
 ```sh
 cargo install --git https://github.com/nightswatchhq/nuthatch nuthatch
+# needs nuthatch >= 2.7.1: `--window-adaptive` is how this artefact was measured.
+# `--seal-direct` alone is the fixed-window arm, and a different run.
 git clone https://github.com/nightswatchhq/obib-case6 && cd obib-case6
 
 export RPC=https://your-mainnet-archive-endpoint/    # keep the key in your environment, not the repo
-nuthatch bench backfill --dir . --from 19000000 --to 19010000 --runs 5 --seal-direct --rpc "$RPC"
+nuthatch bench backfill --dir . --from 19000000 --to 19010000 --runs 5 --seal-direct --window-adaptive --rpc "$RPC"
 ```
 
 The run prints a report and writes one with `--out`, carrying provider, hardware and commit. Our
