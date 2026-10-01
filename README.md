@@ -33,7 +33,7 @@ That is the entire design goal, and it cuts both ways.
 ## Reproduce it
 
 ```sh
-cargo install --git https://github.com/nightswatchhq/nuthatch nuthatch
+curl -fsSL https://nuthatch-indexer.com/install.sh | sh   # prebuilt; a source build needs Rust 1.95.0
 # needs nuthatch >= 2.7.1: `--window-adaptive` is how this artefact was measured.
 # `--seal-direct` alone is the fixed-window arm, and a different run.
 git clone https://github.com/nightswatchhq/obib-case6 && cd obib-case6
