@@ -9,22 +9,35 @@ This exists so the number below can be reproduced rather than believed.
 
 ## The result
 
-Median of 5 runs, 11-core laptop, Alchemy endpoint, nuthatch 1.0.1:
+Median of 5 runs, nuthatch 4.7.0 (the published `aarch64-apple-darwin` release binary), Tenderly's
+keyless public gateway `https://mainnet.gateway.tenderly.co`, an 18-core Apple M5 Pro with 48 GB,
+2026-10-05:
 
 | | |
 |---|---|
-| wall clock | **49.5 s** |
+| wall clock | **4.67 s** (runs 4.5-5.4 s) |
 | events | **35,271** |
 | children discovered | **232** |
-| RPC requests | **16** |
-| peak RSS | **247 MB** |
+| RPC requests | **14** |
+| peak RSS | **229 MB** (205-251 MB across runs) |
 
 **35,271 = 35,039 `Swap` + 232 `PairCreated`.** The 35,039 is OBIB's expected record count exactly.
+The event, child and request counts were the same in all five runs, and none was throttled.
+
+The report is
+[`docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.json`](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.json)
+in the core repo, and
+[the note beside it](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.md)
+records the binary's sha256, the machine, the exact command and every run.
+
+The figure this page used to show, **49.5 s** with 16 requests and 247 MB, is **withdrawn: 1.0.1 on
+a closed Alchemy account**. It cannot be rerun by anyone, so it is no longer a claim.
 
 OBIB publishes two different sets of figures for this case. Its January 2026 results table gives
 Envio HyperIndex **1.92 min**, Ponder 6.44 min, Subsquid 5.34 min and Sentio 14.36 min; the case-6
 page reports Envio at **30 s**, Subsquid 2 min, Sentio and Subgraph 19 min, Ponder 21 min. We quote
-both rather than the flattering one. Against the second, Envio is faster than this.
+both. The 4.67 s above is under both, and that is not a like-for-like ranking: those runs were on
+other machines, other days and other endpoints.
 
 One caveat we would rather state than have pointed out: Envio and Subsquid serve this from their own
 pre-indexed networks, while nuthatch runs against plain JSON-RPC with no third-party data dependency.
@@ -34,16 +47,17 @@ That is the entire design goal, and it cuts both ways.
 
 ```sh
 curl -fsSL https://nuthatch-indexer.com/install.sh | sh   # prebuilt; a source build needs Rust 1.95.0
-# needs nuthatch >= 2.7.1: `--window-adaptive` is how this artefact was measured.
-# `--seal-direct` alone is the fixed-window arm, and a different run.
+# the figure above was measured on 4.7.0; this is its exact command
 git clone https://github.com/nightswatchhq/obib-case6 && cd obib-case6
 
-export RPC=https://your-mainnet-archive-endpoint/    # keep the key in your environment, not the repo
+export RPC=https://mainnet.gateway.tenderly.co   # keyless; any mainnet archive endpoint works
 nuthatch bench backfill --dir . --from 19000000 --to 19010000 --runs 5 --seal-direct --window-adaptive --rpc "$RPC"
 ```
 
-The run prints a report and writes one with `--out`, carrying provider, hardware and commit. Our
-artifacts live in the core repo:
+The run prints a report and writes one with `--out`, carrying provider, hardware and commit. On a
+factory nest the bench always adapts its window, so `--window-adaptive` is there to match the recorded
+command rather than to change anything. The older artifacts, from the withdrawn Alchemy setup, stay in
+the core repo for the record:
 [`docs/bench/obib-case6.json`](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6.json)
 and a [cold-control run](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6-cold-control.json).
 
@@ -94,11 +108,12 @@ and the discovery is rebuilt deterministically from the stored factory events on
 
 ## Wall clock is partly the provider's number
 
-The same range on the same commit measured anywhere from 17 s to 57 s depending on when it ran. We
-checked the obvious explanation instead of assuming it: re-running against an adjacent, never-fetched
-range landed in the same band, so provider caching is not what made the fast runs fast. The event count
-and the 16 RPC requests are invariant across every run, and they are the honest measure of range
-control. Treat any single wall-clock figure from a shared public endpoint, ours included, accordingly.
+In August 2026, on the withdrawn Alchemy setup, the same range on the same commit measured anywhere
+from 17 s to 57 s depending on when it ran. We checked the obvious explanation instead of assuming it:
+re-running against an adjacent, never-fetched range landed in the same band, so provider caching was
+not what made the fast runs fast. The event count was invariant across every run, and so was the
+request count for a given version: 16 then, 14 on 4.7.0 in all five runs. Those are the honest measure
+of range control. Treat any single wall-clock figure from a shared public endpoint, ours included, accordingly.
 
 ## Licence
 
