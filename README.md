@@ -1,6 +1,6 @@
 # OBIB case 6, as a nuthatch nest
 
-A [nuthatch](https://github.com/nightswatchhq/nuthatch) implementation of **case 6** of Sentio's
+A [nuthatch](https://github.com/nuthatch-org/nuthatch) implementation of **case 6** of Sentio's
 [Open Blockchain Indexer Benchmark](https://github.com/sentioxyz/open-blockchain-indexer-benchmark):
 the Uniswap V2 factory over blocks 19,000,000 to 19,010,000, discovering pairs from `PairCreated`
 and indexing `Swap` on every child it finds.
@@ -25,9 +25,9 @@ keyless public gateway `https://mainnet.gateway.tenderly.co`, an 18-core Apple M
 The event, child and request counts were the same in all five runs, and none was throttled.
 
 The report is
-[`docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.json`](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.json)
+[`docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.json`](https://github.com/nuthatch-org/nuthatch/blob/main/docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.json)
 in the core repo, and
-[the note beside it](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.md)
+[the note beside it](https://github.com/nuthatch-org/nuthatch/blob/main/docs/bench/obib-case6-4.7.0-tenderly-2026-10-05.md)
 records the binary's sha256, the machine, the exact command and every run.
 
 The figure this page used to show, **49.5 s** with 16 requests and 247 MB, is **withdrawn: 1.0.1 on
@@ -48,7 +48,7 @@ That is the entire design goal, and it cuts both ways.
 ```sh
 curl -fsSL https://nuthatch-indexer.com/install.sh | sh   # prebuilt; a source build needs Rust 1.95.0
 # the figure above was measured on 4.7.0; this is its exact command
-git clone https://github.com/nightswatchhq/obib-case6 && cd obib-case6
+git clone https://github.com/nuthatch-org/obib-case6 && cd obib-case6
 
 export RPC=https://mainnet.gateway.tenderly.co   # keyless; any mainnet archive endpoint works
 nuthatch bench backfill --dir . --from 19000000 --to 19010000 --runs 5 --seal-direct --window-adaptive --rpc "$RPC"
@@ -58,8 +58,8 @@ The run prints a report and writes one with `--out`, carrying provider, hardware
 factory nest the bench always adapts its window, so `--window-adaptive` is there to match the recorded
 command rather than to change anything. The older artifacts, from the withdrawn Alchemy setup, stay in
 the core repo for the record:
-[`docs/bench/obib-case6.json`](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6.json)
-and a [cold-control run](https://github.com/nightswatchhq/nuthatch/blob/main/docs/bench/obib-case6-cold-control.json).
+[`docs/bench/obib-case6.json`](https://github.com/nuthatch-org/nuthatch/blob/main/docs/bench/obib-case6.json)
+and a [cold-control run](https://github.com/nuthatch-org/nuthatch/blob/main/docs/bench/obib-case6-cold-control.json).
 
 To index it into a queryable database rather than time it:
 
